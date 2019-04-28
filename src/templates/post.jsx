@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import Helmet from "react-helmet";
 import { graphql } from "gatsby";
 import Layout from "../layout";
@@ -31,13 +32,15 @@ export default class PostTemplate extends React.Component {
           <SEO postPath={slug} postNode={postNode} postSEO />
           <div>
             <h1>{post.title}</h1>
+            <h3>
+              <a href={`/author/${_.kebabCase(post.author.id)}`}>
+                {post.author.id}
+              </a>
+            </h3>
             <div dangerouslySetInnerHTML={{ __html: postNode.html }} />
             <div className="post-meta">
               <PostTags tags={post.tags} />
-              <SocialLinks postPath={slug} postNode={postNode} />
             </div>
-            <UserInfo config={config} />
-            <Disqus postNode={postNode} />
           </div>
         </div>
       </Layout>
@@ -58,6 +61,11 @@ export const pageQuery = graphql`
         date
         category
         tags
+        author {
+          id
+          bio
+          twitter
+        }
       }
       fields {
         nextTitle

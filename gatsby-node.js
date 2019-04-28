@@ -80,6 +80,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
           value: date.toISOString()
         });
       }
+      if (Object.prototype.hasOwnProperty.call(node.frontmatter, "author")) {
+        createNodeField({
+          node,
+          name: "authorId",
+          value: node.frontmatter.author
+        });
+      }
     }
     createNodeField({ node, name: "slug", value: slug });
     postNodes.push(node);
@@ -101,6 +108,8 @@ exports.createPages = ({ graphql, actions }) => {
     const postPage = path.resolve("src/templates/post.jsx");
     const tagPage = path.resolve("src/templates/tag.jsx");
     const categoryPage = path.resolve("src/templates/category.jsx");
+    const authorsPage = path.resolve("src/templates/Authors/index.jsx");
+    const authorPage = path.resolve("src/templates/Author/index.jsx");
     resolve(
       graphql(
         `
@@ -111,6 +120,9 @@ exports.createPages = ({ graphql, actions }) => {
                   frontmatter {
                     tags
                     category
+                    author {
+                      id
+                    }
                   }
                   fields {
                     slug
@@ -129,6 +141,7 @@ exports.createPages = ({ graphql, actions }) => {
 
         const tagSet = new Set();
         const categorySet = new Set();
+        const authorSet = new Set();
         result.data.allMarkdownRemark.edges.forEach(edge => {
           if (edge.node.frontmatter.tags) {
             edge.node.frontmatter.tags.forEach(tag => {
@@ -138,6 +151,10 @@ exports.createPages = ({ graphql, actions }) => {
 
           if (edge.node.frontmatter.category) {
             categorySet.add(edge.node.frontmatter.category);
+          }
+
+          if (edge.node.frontmatter.author) {
+            authorSet.add(edge.node.frontmatter.author.id);
           }
 
           createPage({
@@ -167,6 +184,21 @@ exports.createPages = ({ graphql, actions }) => {
             component: categoryPage,
             context: {
               category
+            }
+          });
+        });
+
+        createPage({
+          path: `/authors/`,
+          component: authorsPage
+        });
+        const authorList = Array.from(authorSet);
+        authorList.forEach(author => {
+          createPage({
+            path: `/author/${_.kebabCase(author)}/`,
+            component: authorPage,
+            context: {
+              authorId: author
             }
           });
         });

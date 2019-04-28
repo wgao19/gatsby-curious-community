@@ -17,7 +17,11 @@ module.exports = {
       copyright: config.copyright
     }
   },
+  mapping: {
+    "MarkdownRemark.frontmatter.author": `AuthorsYaml`
+  },
   plugins: [
+    "gatsby-transformer-yaml",
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-lodash",
     {

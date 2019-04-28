@@ -18,7 +18,7 @@ module.exports = {
     }
   },
   mapping: {
-    "MarkdownRemark.frontmatter.author": `AuthorsYaml`
+    "MarkdownRemark.frontmatter.author": `AuthorYaml`
   },
   plugins: [
     "gatsby-transformer-yaml",

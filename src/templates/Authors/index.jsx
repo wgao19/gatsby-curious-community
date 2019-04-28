@@ -14,7 +14,7 @@ export default ({
 
 export const pageQuery = graphql`
   query AuthorsQuery {
-    allAuthorsYaml {
+    allAuthorYaml {
       edges {
         node {
           id

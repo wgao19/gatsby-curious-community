@@ -120,12 +120,10 @@ exports.createPages = ({ graphql, actions }) => {
                   frontmatter {
                     tags
                     category
-                    author {
-                      id
-                    }
                   }
                   fields {
                     slug
+                    authorId
                   }
                 }
               }
@@ -153,8 +151,8 @@ exports.createPages = ({ graphql, actions }) => {
             categorySet.add(edge.node.frontmatter.category);
           }
 
-          if (edge.node.frontmatter.author) {
-            authorSet.add(edge.node.frontmatter.author.id);
+          if (edge.node.fields.authorId) {
+            authorSet.add(edge.node.fields.authorId);
           }
 
           createPage({
